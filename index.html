@@ -302,6 +302,23 @@
     .preview-container {
       display: none;
     }
+    .force-desktop .a4-container {
+  width: 210mm !important;
+  padding: 25mm 20mm !important;
+  box-shadow: none !important;
+}
+
+.force-desktop .photo-container {
+  position: absolute !important;
+  top: 25mm !important;
+  right: 20mm !important;
+}
+
+.force-desktop .contact-info {
+  flex-direction: row !important;
+  gap: 40px !important;
+}
+
     
     .preview-header {
       display: flex;
@@ -1238,49 +1255,50 @@
     
     // Generate PDF
     async function generatePDF() {
-      showToast('Generating PDF... Please wait', 'info');
-      
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      
-      try {
-        // Page 1
-        const page1Element = document.getElementById('page1');
-        const canvas1 = await html2canvas(page1Element, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: '#ffffff',
-          logging: false
-        });
-        
-        const imgData1 = canvas1.toDataURL('image/png');
-        pdf.addImage(imgData1, 'PNG', 0, 0, pageWidth, pageHeight);
-        
-        // Page 2
-        pdf.addPage();
-        const page2Element = document.getElementById('page2');
-        const canvas2 = await html2canvas(page2Element, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: '#ffffff',
-          logging: false
-        });
-        
-        const imgData2 = canvas2.toDataURL('image/png');
-        pdf.addImage(imgData2, 'PNG', 0, 0, pageWidth, pageHeight);
-        
-        // Save PDF
-        const fileName = document.getElementById('previewName').textContent.replace(/\s+/g, '_') + '_CV.pdf';
-        pdf.save(fileName);
-        
-        showToast('PDF generated successfully!', 'success');
-      } catch (error) {
-        console.error('PDF generation error:', error);
-        showToast('Error generating PDF. Please try again.', 'error');
-      }
-    }
+  showToast('Generating PDF... Please wait', 'info');
+
+  document.body.classList.add('force-desktop');
+  const originalWidth = document.body.style.width;
+  document.body.style.width = '1200px';
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const scaleValue = window.innerWidth < 768 ? 1.5 : 2;
+
+  try {
+    const page1 = document.getElementById('page1');
+    const canvas1 = await html2canvas(page1, {
+      scale: scaleValue,
+      useCORS: true,
+      backgroundColor: '#ffffff'
+    });
+    pdf.addImage(canvas1.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, pageHeight);
+
+    pdf.addPage();
+    const page2 = document.getElementById('page2');
+    const canvas2 = await html2canvas(page2, {
+      scale: scaleValue,
+      useCORS: true,
+      backgroundColor: '#ffffff'
+    });
+    pdf.addImage(canvas2.toDataURL('image/png'), 'PNG', 0, 0, pageWidth, pageHeight);
+
+    pdf.save(
+      document.getElementById('previewName').textContent.replace(/\s+/g, '_') + '_CV.pdf'
+    );
+
+    showToast('PDF generated successfully!', 'success');
+  } catch (e) {
+    console.error(e);
+    showToast('PDF generation failed on mobile', 'error');
+  }
+
+  document.body.style.width = originalWidth;
+  document.body.classList.remove('force-desktop');
+}
+
     
     // Load sample data - CORRECTED VERSION
     function loadSampleData() {
@@ -1296,7 +1314,7 @@
       document.getElementById('name').value = 'PAYEL HALDER';
       document.getElementById('designation').value = 'Bachelor of Science in Nursing (Intern)';
       document.getElementById('address').value = 'C/O: Shiv Kumar Halder\nVill: Ramnarayanpur\nP.O.: Bijaynagar Bazar, P.S.: Mandir Bazar\nDist: South 24 Parganas, West Bengal - 743345';
-      document.getElementById('phone').value = '9062735220';
+      document.getElementById('phone').value = '9062735XXX';
       document.getElementById('email').value = 'payel.20012@gmail.com';
       document.getElementById('dob').value = '03/11/2000';
       document.getElementById('nationality').value = 'Indian';
