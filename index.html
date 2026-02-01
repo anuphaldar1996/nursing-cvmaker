@@ -929,7 +929,7 @@
       <!-- Preview Action Buttons -->
       <div class="button-group" style="margin-top: 30px;">
         <button class="btn btn-success" onclick="generatePDF()">
-          <i class="fas fa-file-pdf"></i> Generate PDF
+          <i class="fas fa-file-pdf"></i> Download your CV
         </button>
         <button class="btn btn-primary" onclick="window.print()">
           <i class="fas fa-print"></i> Print CV
@@ -1122,7 +1122,7 @@
       // Scroll to top
       window.scrollTo(0, 0);
       
-      showToast('CV Preview generated successfully!', 'success');
+      showToast('CV Preview generated successful!', 'success');
     }
     
     // Update preview content
@@ -1315,10 +1315,10 @@
       document.getElementById('previewName').textContent.replace(/\s+/g, '_') + '_CV.pdf'
     );
 
-    showToast('PDF generated successfully!', 'success');
+    showToast('PDF is downloading!', 'success');
   } catch (e) {
     console.error(e);
-    showToast('PDF generation failed on mobile', 'error');
+    showToast('PDF download failed on mobile', 'error');
   }
 
   document.body.style.width = originalWidth;
@@ -1521,3 +1521,4 @@ function activateTab(tabName) {
   </script>
 </body>
 </html>
+
