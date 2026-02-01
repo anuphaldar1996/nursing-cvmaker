@@ -12,7 +12,15 @@
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    
+    /* Disable manual tab clicking */
+.tab-btn {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.tab-btn.active {
+  opacity: 1;
+}
     body {
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
@@ -545,7 +553,7 @@
       
       <!-- Tab Navigation -->
       <div class="tab-navigation">
-        <button class="tab-btn active" onclick="showTab('personal')">
+        <button class="tab-btn active">
           <i class="fas fa-user"></i> Personal
         </button>
         <button class="tab-btn" onclick="showTab('education')">
@@ -650,6 +658,11 @@
           <label><i class="fas fa-paint-brush"></i> Hobbies</label>
           <input type="text" id="hobbies" class="form-control" placeholder="e.g., Reading, Music, Sports">
         </div>
+        <div class="button-group">
+  <button class="btn btn-primary" onclick="nextTab('personal')">
+    Next <i class="fas fa-arrow-right"></i>
+  </button>
+</div>
       </div>
       
       <!-- Education Tab -->
@@ -674,6 +687,14 @@
         <button class="btn btn-secondary" onclick="addQualificationEntry()">
           <i class="fas fa-plus"></i> Add Qualification Entry
         </button>
+        <div class="button-group">
+  <button class="btn btn-secondary" onclick="prevTab('education')">
+    <i class="fas fa-arrow-left"></i> Previous
+  </button>
+  <button class="btn btn-primary" onclick="nextTab('education')">
+    Next <i class="fas fa-arrow-right"></i>
+  </button>
+</div>
       </div>
       
       <!-- Experience Tab -->
@@ -698,6 +719,14 @@
             <input type="text" id="declarationDate" class="form-control" placeholder="DD/MM/YYYY">
           </div>
         </div>
+        <div class="button-group">
+  <button class="btn btn-secondary" onclick="prevTab('experience')">
+    <i class="fas fa-arrow-left"></i> Previous
+  </button>
+  <button class="btn btn-primary" onclick="nextTab('experience')">
+    Next <i class="fas fa-arrow-right"></i>
+  </button>
+</div>
       </div>
       
       <!-- Skills Tab -->
@@ -711,21 +740,31 @@
           <label><i class="fas fa-laptop-code"></i> Technical Skills</label>
           <textarea id="technicalSkills" class="form-control" rows="4" placeholder="List your technical skills..."></textarea>
         </div>
+        <div class="button-group">
+  <button class="btn btn-secondary" onclick="prevTab('skills')">
+    <i class="fas fa-arrow-left"></i> Previous
+  </button>
+  <button class="btn btn-success" id="nextToPreviewBtn" onclick="generatePreview()" style="display: none;">
+    <i class="fas fa-eye"></i> Preview CV
+  </button>
+</div>
       </div>
       
       <!-- Action Buttons -->
       <div class="button-group">
-        <button class="btn btn-primary" onclick="generatePreview()">
-          <i class="fas fa-eye"></i> Preview CV
-        </button>
-        <button class="btn btn-success" onclick="loadSampleData()">
-          <i class="fas fa-magic"></i> Load Sample
-        </button>
-        <button class="btn btn-warning" onclick="resetForm()">
-          <i class="fas fa-trash"></i> Reset Form
-        </button>
-      </div>
-    </div>
+  <button class="btn btn-primary" id="nextBtn" onclick="nextTab('personal')" style="display: none;">
+    Next <i class="fas fa-arrow-right"></i>
+  </button>
+  <button class="btn btn-success" onclick="generatePreview()">
+    <i class="fas fa-eye"></i> Preview CV
+  </button>
+  <button class="btn btn-secondary" onclick="loadSampleData()">
+    <i class="fas fa-magic"></i> Load Sample
+  </button>
+  <button class="btn btn-warning" onclick="resetForm()">
+    <i class="fas fa-trash"></i> Reset Form
+  </button>
+</div></div>
     
     <!-- CV Preview Page -->
     <div id="previewPage" class="preview-container">
@@ -919,22 +958,9 @@
     
     // Tab Management
     function showTab(tabName) {
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Remove active class from all buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      
-      // Show selected tab
-      document.getElementById(tabName + 'Tab').classList.add('active');
-      
-      // Add active class to clicked button
-      event.target.classList.add('active');
-    }
+  activateTab(tabName);
+}
+
     
     // Photo Upload
     document.getElementById('photoInput').addEventListener('change', function(e) {
@@ -1446,10 +1472,52 @@
     
     // Initialize with one education entry
     document.addEventListener('DOMContentLoaded', function() {
-      addEducationEntry();
-      addQualificationEntry();
-      showTab('personal');
-    });
+  addEducationEntry();
+  addQualificationEntry();
+  // Hide the next button initially (will be shown when needed)
+  document.getElementById('nextBtn').style.display = 'none';
+  // Show only the first tab
+  showTab('personal');
+});
+    const tabs = ['personal', 'education', 'experience', 'skills'];
+
+function nextTab(current) {
+  const idx = tabs.indexOf(current);
+  if (idx < tabs.length - 1) {
+    activateTab(tabs[idx + 1]);
+  }
+}
+
+function prevTab(current) {
+  const idx = tabs.indexOf(current);
+  if (idx > 0) {
+    activateTab(tabs[idx - 1]);
+  }
+}
+
+function activateTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab =>
+    tab.classList.remove('active')
+  );
+
+  // Remove active from buttons
+  document.querySelectorAll('.tab-btn').forEach(btn =>
+    btn.classList.remove('active')
+  );
+
+  // Show selected tab
+  document.getElementById(tabName + 'Tab').classList.add('active');
+
+  // Activate correct button
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (btn.textContent.toLowerCase().includes(tabName)) {
+      btn.classList.add('active');
+    }
+  });
+
+  window.scrollTo(0, 0);
+}
   </script>
 </body>
 </html>
