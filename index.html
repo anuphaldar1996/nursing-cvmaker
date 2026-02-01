@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional CV Builder</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+    
+    /* Main container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 {
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+    
+    /* CV Builder Form (Initial View) */
+    #cvBuilder {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    /* Tab Navigation */
+    .tab-navigation {
+      display: flex;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 16px;
+      font-weight: 600;
+      color: #7f8c8d;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex: 1;
+      text-align: center;
+      min-width: 140px;
+    }
+    
+    .tab-btn:hover { 
+      color: #3498db; 
+    }
+    
+    .tab-btn.active { 
+      color: #2c3e50; 
+      border-bottom-color: #3498db; 
+    }
+    
+    .tab-content { 
+      display: none; 
+    }
+    
+    .tab-content.active { 
+      display: block; 
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2c3e50;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+    
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    /* Photo Upload */
+    .photo-upload-container {
+      border: 2px dashed #3498db;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+    
+    .photo-upload-container:hover {
+      background: #f8f9fa;
+      border-color: #2980b9;
+    }
+    
+    .photo-preview {
+      width: 150px;
+      height: 180px;
+      margin: 10px auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+    }
+    
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    
+    /* Entry Management */
+    .entry-container {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+    }
+    
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .entry-header h4 {
+      color: #2c3e50;
+      font-size: 16px;
+    }
+    
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary { 
+      background: #3498db; 
+      color: white; 
+    }
+    
+    .btn-primary:hover { 
+      background: #2980b9; 
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-success { 
+      background: #27ae60; 
+      color: white; 
+    }
+    
+    .btn-success:hover { 
+      background: #219653; 
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+    
+    .btn-secondary { 
+      background: #7f8c8d; 
+      color: white; 
+    }
+    
+    .btn-secondary:hover { 
+      background: #6c7b7d; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-warning { 
+      background: #f39c12; 
+      color: white; 
+    }
+    
+    .btn-warning:hover { 
+      background: #d68910; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger { 
+      background: #e74c3c; 
+      color: white; 
+    }
+    
+    .btn-danger:hover { 
+      background: #c0392b; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+    
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #2c3e50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 6px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(150%);
+      transition: transform 0.4s ease;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast.success { background: #27ae60; }
+    .toast.error { background: #e74c3c; }
+    .toast.info { background: #3498db; }
+    
+    /* CV Preview Page Styles */
+    .preview-container {
+      display: none;
+    }
+    
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+    
+    /* A4 Page Container */
+    .a4-container {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: white;
+      padding: 25mm 20mm;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    /* CV Preview Styles */
+    .header-section {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #000;
+    }
+    
+    .name {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .designation {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #000;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .address {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      text-align: center;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      font-size: 16px;
+      margin-top: 10px;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .photo-container {
+      position: absolute;
+      top: 25mm;
+      right: 20mm;
+      width: 120px;
+      height: 150px;
+      border: 1px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      overflow: hidden;
+    }
+    
+    .photo-placeholder {
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+      padding: 10px;
+    }
+    
+    #previewPhoto {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0 12px 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #000;
+      text-transform: uppercase;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .section-content {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-left: 0;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 16px;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    table, th, td {
+      border: 1px solid #000;
+    }
+    
+    td {
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    
+    .skills-table td {
+      width: 50%;
+      padding: 10px 15px;
+      vertical-align: top;
+    }
+    
+    .declaration {
+      margin-top: 30px;
+      font-size: 16px;
+      line-height: 1.6;
+      font-family: 'Times New Roman', serif;
+    }
+    
+    .declaration-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    /* Print Styles */
+    @media print {
+      .preview-header,
+      .toast {
+        display: none !important;
+      }
+      
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .a4-container {
+        box-shadow: none;
+        padding: 25mm 20mm;
+        margin: 0 auto;
+        page-break-inside: avoid;
+        page-break-after: always;
+      }
+      
+      .page-break {
+        display: block;
+        height: 0;
+        overflow: hidden;
+      }
+      
+      table { page-break-inside: avoid; }
+      .section-title { page-break-after: avoid; }
+      .section-content { page-break-before: avoid; }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .tab-btn {
+        min-width: 120px;
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .a4-container {
+        padding: 15px;
+        width: 100%;
+        box-shadow: none;
+      }
+      
+      .photo-container {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin: 15px auto;
+        width: 100px;
+        height: 125px;
+      }
+      
+      .contact-info {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- CV Builder Form (Initial View) -->
+    <div id="cvBuilder">
+      <div class="header">
+        <h1><i class="fas fa-file-alt"></i> Professional CV Builder</h1>
+        <p>Fill in your details below to create a professional CV</p>
+      </div>
+      
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" onclick="showTab('personal')">
+          <i class="fas fa-user"></i> Personal
+        </button>
+        <button class="tab-btn" onclick="showTab('education')">
+          <i class="fas fa-graduation-cap"></i> Education
+        </button>
+        <button class="tab-btn" onclick="showTab('experience')">
+          <i class="fas fa-briefcase"></i> Experience
+        </button>
+        <button class="tab-btn" onclick="showTab('skills')">
+          <i class="fas fa-tools"></i> Skills
+        </button>
+      </div>
+      
+      <!-- Personal Tab -->
+      <div id="personalTab" class="tab-content active">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Full Name</label>
+          <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-briefcase"></i> Designation / Profession</label>
+          <input type="text" id="designation" class="form-control" placeholder="e.g., Software Engineer, Nurse, Teacher">
+        </div>
+        
+        <div class="photo-upload-container" onclick="document.getElementById('photoInput').click()">
+          <h3><i class="fas fa-camera"></i> Profile Photo</h3>
+          <p>Click to upload a professional photo (Optional)</p>
+          <div class="photo-preview">
+            <i class="fas fa-user" style="font-size: 50px; color: #7f8c8d;"></i>
+            <img id="photoPreview" alt="Profile Photo Preview">
+          </div>
+          <p class="small">Recommended size: 120x150px</p>
+        </div>
+        <input type="file" id="photoInput" class="form-control" accept="image/*" style="display: none;">
+        
+        <div class="form-group">
+          <label><i class="fas fa-map-marker-alt"></i> Address</label>
+          <textarea id="address" class="form-control" rows="3" placeholder="Enter your complete address"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-phone"></i> Phone Number</label>
+            <input type="text" id="phone" class="form-control" placeholder="Enter phone number">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter email address">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+            <input type="text" id="dob" class="form-control" placeholder="DD/MM/YYYY">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-globe"></i> Nationality</label>
+            <input type="text" id="nationality" class="form-control" placeholder="e.g., Indian">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-venus-mars"></i> Gender</label>
+            <select id="gender" class="form-control">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-heart"></i> Marital Status</label>
+            <select id="maritalStatus" class="form-control">
+              <option value="">Select Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Unmarried">Unmarried</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label><i class="fas fa-users"></i> Caste</label>
+            <input type="text" id="caste" class="form-control" placeholder="Enter caste">
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-pray"></i> Religion</label>
+            <input type="text" id="religion" class="form-control" placeholder="Enter religion">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-language"></i> Languages Known</label>
+          <input type="text" id="languages" class="form-control" placeholder="e.g., English, Hindi, Bengali">
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-paint-brush"></i> Hobbies</label>
+          <input type="text" id="hobbies" class="form-control" placeholder="e.g., Reading, Music, Sports">
+        </div>
+      </div>
+      
+      <!-- Education Tab -->
+      <div id="educationTab" class="tab-content">
+        <div class="form-group">
+          <label><i class="fas fa-bullseye"></i> Career Objective</label>
+          <textarea id="careerObjective" class="form-control" rows="4" placeholder="Describe your career objective..."></textarea>
+        </div>
+        
+        <h3><i class="fas fa-graduation-cap"></i> Educational Qualifications</h3>
+        <div id="educationEntries">
+          <!-- Education entries will be added here -->
+        </div>
+        <button class="btn btn-secondary" onclick="addEducationEntry()">
+          <i class="fas fa-plus"></i> Add Education Entry
+        </button>
+        
+        <h3 style="margin-top: 30px;"><i class="fas fa-certificate"></i> Professional Qualifications</h3>
+        <div id="qualificationEntries">
+          <!-- Qualification entries will be added here -->
+        </div>
+        <button class="btn btn-secondary" onclick="addQualificationEntry()">
+          <i class="fas fa-plus"></i> Add Qualification Entry
+        </button>
+      </div>
+      
+      <!-- Experience Tab -->
+      <div id="experienceTab" class="tab-content">
+        <div class="form-group">
+          <label><i class="fas fa-briefcase"></i> Professional Experience</label>
+          <textarea id="professionalExperience" class="form-control" rows="6" placeholder="Describe your professional experience..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-file-signature"></i> Declaration</label>
+          <textarea id="declaration" class="form-control" rows="3" placeholder="Your declaration statement..."></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Declaration Place</label>
+            <input type="text" id="declarationPlace" class="form-control" placeholder="City name">
+          </div>
+          <div class="form-group">
+            <label>Declaration Date</label>
+            <input type="text" id="declarationDate" class="form-control" placeholder="DD/MM/YYYY">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Skills Tab -->
+      <div id="skillsTab" class="tab-content">
+        <div class="form-group">
+          <label><i class="fas fa-tools"></i> Professional Skills</label>
+          <textarea id="professionalSkills" class="form-control" rows="4" placeholder="List your professional skills..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-laptop-code"></i> Technical Skills</label>
+          <textarea id="technicalSkills" class="form-control" rows="4" placeholder="List your technical skills..."></textarea>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="generatePreview()">
+          <i class="fas fa-eye"></i> Preview CV
+        </button>
+        <button class="btn btn-success" onclick="loadSampleData()">
+          <i class="fas fa-magic"></i> Load Sample
+        </button>
+        <button class="btn btn-warning" onclick="resetForm()">
+          <i class="fas fa-trash"></i> Reset Form
+        </button>
+      </div>
+    </div>
+    
+    <!-- CV Preview Page -->
+    <div id="previewPage" class="preview-container">
+      <div class="preview-header">
+        <h1><i class="fas fa-file-alt"></i> CV Preview</h1>
+        <button class="btn btn-primary" onclick="goBackToBuilder()">
+          <i class="fas fa-arrow-left"></i> Back to Edit
+        </button>
+      </div>
+      
+      <!-- CV Preview Content -->
+      <div id="cvContent">
+        <!-- Page 1 -->
+        <div class="a4-container" id="page1">
+          <div class="header-section">
+            <div class="photo-container">
+              <div class="photo-placeholder">
+                <i class="fas fa-user" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                No photo
+              </div>
+              <img id="previewPhoto" alt="Profile Photo">
+            </div>
+            
+            <div class="name" id="previewName">YOUR NAME HERE</div>
+            <div class="designation" id="previewDesignation">Your Designation / Profession</div>
+            
+            <div class="address" id="previewAddress">
+              Address Line 1<br>
+              Address Line 2<br>
+              Address Line 3
+            </div>
+            
+            <div class="contact-info">
+              <div><i class="fas fa-phone"></i> <span id="previewPhone">Phone Number</span></div>
+              <div><i class="fas fa-envelope"></i> <span id="previewEmail">Email Address</span></div>
+            </div>
+          </div>
+          
+          <!-- Career Objective -->
+          <div class="section-title">Career Objective</div>
+          <div class="section-content" id="previewCareerObjective">
+            To obtain a responsible position that offers opportunities to enhance professional skills, deliver high-quality work, and contribute to the growth and values of the organization.
+          </div>
+          
+          <!-- Personal Details -->
+          <div class="section-title">Personal Details</div>
+          <div class="section-content">
+            <table>
+              <tr>
+                <td>Date of Birth</td>
+                <td id="previewDob">DD/MM/YYYY</td>
+              </tr>
+              <tr>
+                <td>Nationality</td>
+                <td id="previewNationality">Nationality</td>
+              </tr>
+              <tr>
+                <td>Gender</td>
+                <td id="previewGender">Gender</td>
+              </tr>
+              <tr>
+                <td>Marital Status</td>
+                <td id="previewMaritalStatus">Marital Status</td>
+              </tr>
+              <tr>
+                <td>Caste</td>
+                <td id="previewCaste">Caste</td>
+              </tr>
+              <tr>
+                <td>Religion</td>
+                <td id="previewReligion">Religion</td>
+              </tr>
+              <tr>
+                <td>Languages Known</td>
+                <td id="previewLanguages">Languages Known</td>
+              </tr>
+              <tr>
+                <td>Hobbies</td>
+                <td id="previewHobbies">Hobbies</td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- Educational Qualification -->
+          <div class="section-title">Educational Qualification</div>
+          <div class="section-content">
+            <table id="previewEducationTable">
+              <tr>
+                <td>Examination</td>
+                <td>Board/University</td>
+                <td>Year</td>
+                <td>Marks/Grade</td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align: center; color: #999;">No education entries added</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Page 2 -->
+        <div class="a4-container" id="page2" style="margin-top: 30px;">
+          <!-- Professional Qualification -->
+          <div class="section-title">Professional Qualification</div>
+          <div class="section-content">
+            <table id="previewQualificationTable">
+              <tr>
+                <td>Year/Semester</td>
+                <td>Institution</td>
+                <td>Year</td>
+                <td>Marks (%)</td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align: center; color: #999;">No qualification entries added</td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- Professional Experience -->
+          <div class="section-title">Professional Experience</div>
+          <div class="section-content" id="previewProfessionalExperience">
+            Your professional experience details will appear here.
+          </div>
+          
+          <!-- Skills -->
+          <div class="section-title">Skills</div>
+          <div class="section-content">
+            <table class="skills-table">
+              <tr>
+                <td>
+                  <strong>Professional Skills</strong><br>
+                  <div id="previewProfessionalSkills">
+                    List your professional skills here
+                  </div>
+                </td>
+                <td>
+                  <strong>Technical Skills</strong><br>
+                  <div id="previewTechnicalSkills">
+                    List your technical skills here
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- Declaration -->
+          <div class="declaration">
+            <div class="declaration-title">Declaration</div>
+            <div id="previewDeclarationText">
+              I hereby declare that the above information is true and correct to the best of my knowledge and belief.
+            </div>
+            <br>
+            <div><strong>Place:</strong> <span id="previewDeclarationPlace">Your City</span></div>
+            <div><strong>Date:</strong> <span id="previewDeclarationDate">DD/MM/YYYY</span></div>
+            <div style="margin-top: 30px; text-align: right;">
+              <strong>Signature: </strong>________________________
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Preview Action Buttons -->
+      <div class="button-group" style="margin-top: 30px;">
+        <button class="btn btn-success" onclick="generatePDF()">
+          <i class="fas fa-file-pdf"></i> Generate PDF
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <i class="fas fa-print"></i> Print CV
+        </button>
+        <button class="btn btn-secondary" onclick="goBackToBuilder()">
+          <i class="fas fa-edit"></i> Edit CV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Changes saved successfully!</span>
+  </div>
+
+  <!-- PDF Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    // Global variables
+    let educationCount = 0;
+    let qualificationCount = 0;
+    
+    // Tab Management
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Remove active class from all buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected tab
+      document.getElementById(tabName + 'Tab').classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+    
+    // Photo Upload
+    document.getElementById('photoInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      if (!file.type.match('image.*')) {
+        showToast('Please select an image file!', 'error');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('photoPreview');
+        img.src = e.target.result;
+        img.style.display = 'block';
+        img.parentElement.querySelector('i').style.display = 'none';
+        showToast('Photo uploaded successfully!', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    // Education Entry Management
+    function addEducationEntry() {
+      educationCount++;
+      const container = document.getElementById('educationEntries');
+      
+      const entryDiv = document.createElement('div');
+      entryDiv.className = 'entry-container';
+      
+      entryDiv.innerHTML = `
+        <div class="entry-header">
+          <h4>Education Entry #${educationCount}</h4>
+          <button class="btn btn-danger btn-small" onclick="removeEducationEntry(this)">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Examination</label>
+            <input type="text" class="form-control edu-examination" placeholder="e.g., B.Tech, B.Sc, MBA">
+          </div>
+          <div class="form-group">
+            <label>Board/University</label>
+            <input type="text" class="form-control edu-board" placeholder="University name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year</label>
+            <input type="text" class="form-control edu-year" placeholder="Year of completion">
+          </div>
+          <div class="form-group">
+            <label>Marks/Grade</label>
+            <input type="text" class="form-control edu-marks" placeholder="e.g., 85%, CGPA: 8.5">
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(entryDiv);
+      showToast('Education entry added!', 'success');
+    }
+    
+    function removeEducationEntry(button) {
+      const entryDiv = button.closest('.entry-container');
+      entryDiv.remove();
+      updateEducationNumbering();
+    }
+    
+    function updateEducationNumbering() {
+      const entries = document.querySelectorAll('.entry-container');
+      let eduCount = 0;
+      entries.forEach((entry) => {
+        const title = entry.querySelector('h4');
+        if (title && title.textContent.includes('Education')) {
+          eduCount++;
+          title.textContent = `Education Entry #${eduCount}`;
+        }
+      });
+      educationCount = eduCount;
+    }
+    
+    // Qualification Entry Management
+    function addQualificationEntry() {
+      qualificationCount++;
+      const container = document.getElementById('qualificationEntries');
+      
+      const entryDiv = document.createElement('div');
+      entryDiv.className = 'entry-container';
+      
+      entryDiv.innerHTML = `
+        <div class="entry-header">
+          <h4>Qualification Entry #${qualificationCount}</h4>
+          <button class="btn btn-danger btn-small" onclick="removeQualificationEntry(this)">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year/Semester</label>
+            <input type="text" class="form-control qual-year" placeholder="e.g., 1st Year, 1st Semester">
+          </div>
+          <div class="form-group">
+            <label>Institution</label>
+            <input type="text" class="form-control qual-institution" placeholder="Institution name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Year</label>
+            <input type="text" class="form-control qual-year-value" placeholder="e.g., 2022">
+          </div>
+          <div class="form-group">
+            <label>Marks (%)</label>
+            <input type="text" class="form-control qual-marks" placeholder="e.g., 60%">
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(entryDiv);
+      showToast('Qualification entry added!', 'success');
+    }
+    
+    function removeQualificationEntry(button) {
+      const entryDiv = button.closest('.entry-container');
+      entryDiv.remove();
+      updateQualificationNumbering();
+    }
+    
+    function updateQualificationNumbering() {
+      const entries = document.querySelectorAll('.entry-container');
+      let qualCount = 0;
+      entries.forEach((entry) => {
+        const title = entry.querySelector('h4');
+        if (title && title.textContent.includes('Qualification')) {
+          qualCount++;
+          title.textContent = `Qualification Entry #${qualCount}`;
+        }
+      });
+      qualificationCount = qualCount;
+    }
+    
+    // Generate CV Preview
+    function generatePreview() {
+      // Basic validation
+      if (!document.getElementById('name').value.trim()) {
+        showToast('Please enter your name first!', 'error');
+        document.getElementById('name').focus();
+        return;
+      }
+      
+      // Update preview with form data
+      updatePreview();
+      
+      // Switch to preview page
+      document.getElementById('cvBuilder').style.display = 'none';
+      document.getElementById('previewPage').style.display = 'block';
+      
+      // Scroll to top
+      window.scrollTo(0, 0);
+      
+      showToast('CV Preview generated successfully!', 'success');
+    }
+    
+    // Update preview content
+    function updatePreview() {
+      // Personal Information
+      document.getElementById('previewName').textContent = document.getElementById('name').value || 'YOUR NAME HERE';
+      document.getElementById('previewDesignation').textContent = document.getElementById('designation').value || 'Your Designation';
+      
+      // Address with line breaks
+      const address = document.getElementById('address').value || 'Address not provided';
+      document.getElementById('previewAddress').innerHTML = address.replace(/\n/g, '<br>');
+      
+      document.getElementById('previewPhone').textContent = document.getElementById('phone').value || 'Not provided';
+      document.getElementById('previewEmail').textContent = document.getElementById('email').value || 'Not provided';
+      
+      // Personal Details
+      document.getElementById('previewDob').textContent = document.getElementById('dob').value || 'Not provided';
+      document.getElementById('previewNationality').textContent = document.getElementById('nationality').value || 'Not provided';
+      document.getElementById('previewGender').textContent = document.getElementById('gender').value || 'Not provided';
+      document.getElementById('previewMaritalStatus').textContent = document.getElementById('maritalStatus').value || 'Not provided';
+      document.getElementById('previewCaste').textContent = document.getElementById('caste').value || 'Not provided';
+      document.getElementById('previewReligion').textContent = document.getElementById('religion').value || 'Not provided';
+      document.getElementById('previewLanguages').textContent = document.getElementById('languages').value || 'Not provided';
+      document.getElementById('previewHobbies').textContent = document.getElementById('hobbies').value || 'Not provided';
+      
+      // Career Objective
+      const careerObjective = document.getElementById('careerObjective').value || 'No career objective provided.';
+      document.getElementById('previewCareerObjective').textContent = careerObjective;
+      
+      // Update Education Table
+      updatePreviewEducationTable();
+      
+      // Update Qualification Table
+      updatePreviewQualificationTable();
+      
+      // Professional Experience
+      const experienceText = document.getElementById('professionalExperience').value || 'No experience details provided.';
+      document.getElementById('previewProfessionalExperience').innerHTML = experienceText.replace(/\n/g, '<br>');
+      
+      // Skills
+      const proSkills = document.getElementById('professionalSkills').value || 'No professional skills listed.';
+      document.getElementById('previewProfessionalSkills').innerHTML = proSkills.replace(/\n/g, '<br>');
+      
+      const techSkills = document.getElementById('technicalSkills').value || 'No technical skills listed.';
+      document.getElementById('previewTechnicalSkills').innerHTML = techSkills.replace(/\n/g, '<br>');
+      
+      // Declaration
+      document.getElementById('previewDeclarationText').textContent = document.getElementById('declaration').value || 'I hereby declare that the above information is true and correct to the best of my knowledge and belief.';
+      document.getElementById('previewDeclarationPlace').textContent = document.getElementById('declarationPlace').value || 'Not specified';
+      document.getElementById('previewDeclarationDate').textContent = document.getElementById('declarationDate').value || 'Not specified';
+      
+      // Update photo in preview
+      const photoPreview = document.getElementById('photoPreview');
+      const previewPhoto = document.getElementById('previewPhoto');
+      
+      if (photoPreview.src) {
+        previewPhoto.src = photoPreview.src;
+        previewPhoto.style.display = 'block';
+        document.querySelector('.photo-placeholder').style.display = 'none';
+      } else {
+        previewPhoto.style.display = 'none';
+        document.querySelector('.photo-placeholder').style.display = 'block';
+      }
+    }
+    
+    function updatePreviewEducationTable() {
+      const tableBody = document.getElementById('previewEducationTable');
+      // Clear existing rows except header
+      while (tableBody.rows.length > 1) {
+        tableBody.deleteRow(1);
+      }
+      
+      const entries = document.querySelectorAll('.entry-container');
+      let hasEntries = false;
+      
+      entries.forEach(container => {
+        const examinationInput = container.querySelector('.edu-examination');
+        if (examinationInput) {
+          const examination = examinationInput.value;
+          const board = container.querySelector('.edu-board').value;
+          const year = container.querySelector('.edu-year').value;
+          const marks = container.querySelector('.edu-marks').value;
+          
+          if (examination || board || year || marks) {
+            hasEntries = true;
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+              <td>${examination || '-'}</td>
+              <td>${board || '-'}</td>
+              <td>${year || '-'}</td>
+              <td>${marks || '-'}</td>
+            `;
+          }
+        }
+      });
+      
+      // If no entries, show placeholder
+      if (!hasEntries) {
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td colspan="4" style="text-align: center; color: #999;">
+            No education entries added yet
+          </td>
+        `;
+      }
+    }
+    
+    function updatePreviewQualificationTable() {
+      const tableBody = document.getElementById('previewQualificationTable');
+      // Clear existing rows except header
+      while (tableBody.rows.length > 1) {
+        tableBody.deleteRow(1);
+      }
+      
+      const entries = document.querySelectorAll('.entry-container');
+      let hasEntries = false;
+      
+      entries.forEach(container => {
+        const yearInput = container.querySelector('.qual-year');
+        if (yearInput) {
+          const yearSem = yearInput.value;
+          const institution = container.querySelector('.qual-institution').value;
+          const year = container.querySelector('.qual-year-value').value;
+          const marks = container.querySelector('.qual-marks').value;
+          
+          if (yearSem || institution || year || marks) {
+            hasEntries = true;
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+              <td>${yearSem || '-'}</td>
+              <td>${institution || '-'}</td>
+              <td>${year || '-'}</td>
+              <td>${marks || '-'}</td>
+            `;
+          }
+        }
+      });
+      
+      // If no entries, show placeholder
+      if (!hasEntries) {
+        const newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+          <td colspan="4" style="text-align: center; color: #999;">
+            No qualification entries added yet
+          </td>
+        `;
+      }
+    }
+    
+    // Go back to builder
+    function goBackToBuilder() {
+      document.getElementById('previewPage').style.display = 'none';
+      document.getElementById('cvBuilder').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+    
+    // Generate PDF
+    async function generatePDF() {
+      showToast('Generating PDF... Please wait', 'info');
+      
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      
+      try {
+        // Page 1
+        const page1Element = document.getElementById('page1');
+        const canvas1 = await html2canvas(page1Element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+        
+        const imgData1 = canvas1.toDataURL('image/png');
+        pdf.addImage(imgData1, 'PNG', 0, 0, pageWidth, pageHeight);
+        
+        // Page 2
+        pdf.addPage();
+        const page2Element = document.getElementById('page2');
+        const canvas2 = await html2canvas(page2Element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+        
+        const imgData2 = canvas2.toDataURL('image/png');
+        pdf.addImage(imgData2, 'PNG', 0, 0, pageWidth, pageHeight);
+        
+        // Save PDF
+        const fileName = document.getElementById('previewName').textContent.replace(/\s+/g, '_') + '_CV.pdf';
+        pdf.save(fileName);
+        
+        showToast('PDF generated successfully!', 'success');
+      } catch (error) {
+        console.error('PDF generation error:', error);
+        showToast('Error generating PDF. Please try again.', 'error');
+      }
+    }
+    
+    // Load sample data - CORRECTED VERSION
+    function loadSampleData() {
+      if (!confirm('This will replace all current data with sample CV. Continue?')) return;
+      
+      // Clear existing entries first
+      document.getElementById('educationEntries').innerHTML = '';
+      document.getElementById('qualificationEntries').innerHTML = '';
+      educationCount = 0;
+      qualificationCount = 0;
+      
+      // Personal Info
+      document.getElementById('name').value = 'TANUSRI HALDER';
+      document.getElementById('designation').value = 'Bachelor of Science in Nursing (Intern)';
+      document.getElementById('address').value = 'C/O: Naba Kumar Halder\nVill: Ramnarayanpur\nP.O.: Bijaynagar Bazar, P.S.: Mandir Bazar\nDist: South 24 Parganas, West Bengal - 743345';
+      document.getElementById('phone').value = '9062735220';
+      document.getElementById('email').value = 'tanusri.20012@gmail.com';
+      document.getElementById('dob').value = '13/11/2001';
+      document.getElementById('nationality').value = 'Indian';
+      document.getElementById('gender').value = 'Female';
+      document.getElementById('maritalStatus').value = 'Unmarried';
+      document.getElementById('caste').value = 'SC';
+      document.getElementById('religion').value = 'Hindu';
+      document.getElementById('languages').value = 'Bengali, English, Hindi';
+      document.getElementById('hobbies').value = 'Creativity, Drawing';
+      
+      // Career Objective
+      document.getElementById('careerObjective').value = 'To obtain a responsible position as a professional nurse that offers opportunities to enhance clinical competence, deliver high-quality patient care, and contribute to the growth and values of the institution.';
+      
+      // Add sample education entries
+      const educationData = [
+        { examination: 'Madhyamik', board: 'W.B.B.S.E', year: '2018', marks: '495' },
+        { examination: 'Higher Secondary', board: 'W.B.C.H.S.E', year: '2020', marks: '359' }
+      ];
+      
+      educationData.forEach(entry => {
+        addEducationEntry();
+        const entries = document.querySelectorAll('.entry-container');
+        const lastEntry = entries[entries.length - 1];
+        
+        // Find the education container (contains edu-examination class)
+        const eduExamInput = lastEntry.querySelector('.edu-examination');
+        if (eduExamInput) {
+          eduExamInput.value = entry.examination;
+          lastEntry.querySelector('.edu-board').value = entry.board;
+          lastEntry.querySelector('.edu-year').value = entry.year;
+          lastEntry.querySelector('.edu-marks').value = entry.marks;
+        }
+      });
+      
+      // Add sample qualification entries
+      const qualificationData = [
+        { yearSem: '1st Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2022', marks: '60%' },
+        { yearSem: '2nd Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2022', marks: '70%' },
+        { yearSem: '3rd Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2023', marks: '75%' },
+        { yearSem: '4th Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2023', marks: '70%' },
+        { yearSem: '5th Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2024', marks: '76%' },
+        { yearSem: '6th Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2024', marks: '64%' },
+        { yearSem: '7th Year', institution: 'WBNC Govt. College of Nursing, Howrah', yearVal: '2025', marks: '70%' }
+      ];
+      
+      qualificationData.forEach(entry => {
+        addQualificationEntry();
+        const entries = document.querySelectorAll('.entry-container');
+        const lastEntry = entries[entries.length - 1];
+        
+        // Find the qualification container (contains qual-year class)
+        const qualYearInput = lastEntry.querySelector('.qual-year');
+        if (qualYearInput) {
+          qualYearInput.value = entry.yearSem;
+          lastEntry.querySelector('.qual-institution').value = entry.institution;
+          lastEntry.querySelector('.qual-year-value').value = entry.yearVal;
+          lastEntry.querySelector('.qual-marks').value = entry.marks;
+        }
+      });
+      
+      // Professional Experience
+      document.getElementById('professionalExperience').value = 'Six months internship experience in Govt. College of Nursing, District Hospital Howrah.\n\n- Provided patient care under supervision\n- Assisted in medical procedures\n- Maintained patient records';
+      
+      // Skills
+      document.getElementById('professionalSkills').value = 'Effective communication\nTeamwork and collaboration\nAdaptability\nClinical decision making\nPatient advocacy\nEmpathetic care';
+      document.getElementById('technicalSkills').value = 'MS Word, Excel, PowerPoint\nBasic computer operations\nInternet and email proficiency\nElectronic medical records';
+      
+      // Declaration
+      document.getElementById('declaration').value = 'I hereby declare that the above information is true and correct to the best of my knowledge and belief.';
+      document.getElementById('declarationPlace').value = 'Kolkata';
+      document.getElementById('declarationDate').value = '01/01/2024';
+      
+      // Auto-update the preview if we're already in preview mode
+      if (document.getElementById('previewPage').style.display === 'block') {
+        updatePreview();
+      }
+      
+      showToast('Sample CV loaded successfully!', 'success');
+    }
+    
+    // Reset form
+    function resetForm() {
+      if (!confirm('This will clear all data. Continue?')) return;
+      
+      // Clear all form fields
+      document.querySelectorAll('.form-control').forEach(input => {
+        if (input.type !== 'file') {
+          input.value = '';
+        }
+      });
+      
+      // Clear select fields
+      document.getElementById('gender').selectedIndex = 0;
+      document.getElementById('maritalStatus').selectedIndex = 0;
+      
+      // Clear entry containers
+      document.getElementById('educationEntries').innerHTML = '';
+      document.getElementById('qualificationEntries').innerHTML = '';
+      educationCount = 0;
+      qualificationCount = 0;
+      
+      // Reset photo
+      const photoPreview = document.getElementById('photoPreview');
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+      photoPreview.parentElement.querySelector('i').style.display = 'block';
+      
+      // Reset preview if it's visible
+      if (document.getElementById('previewPage').style.display === 'block') {
+        updatePreview();
+      }
+      
+      showToast('Form reset successfully!', 'success');
+    }
+    
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      
+      toastMessage.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Initialize with one education entry
+    document.addEventListener('DOMContentLoaded', function() {
+      addEducationEntry();
+      addQualificationEntry();
+      showTab('personal');
+    });
+  </script>
+</body>
+</html>
